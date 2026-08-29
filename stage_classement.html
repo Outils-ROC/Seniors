@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympiade ROC Séniors 2026</title>
+<style>
+  :root{
+    --bg: #FFFFFF;
+    --panel: #FFFFFF;
+    --panel-2: #FBF4F5;
+    --line: #EAD3D6;
+    --text: #241012;
+    --muted: #8a6a6d;
+    --or: #e3b341;
+    --argent: #b9becb;
+    --bronze: #c9814a;
+    --accent: #DB1E33;
+    --accent-2: #DB1E33;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(900px 420px at 105% -10%, rgba(219,30,51,0.10) 0%, transparent 60%),
+      radial-gradient(700px 380px at -5% 110%, rgba(219,30,51,0.06) 0%, transparent 60%),
+      #FFFFFF;
+    color: var(--text);
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    padding: 28px 18px 60px;
+    min-height: 100vh;
+  }
+  .wrap{max-width: 980px; margin: 0 auto;}
+
+  header{
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    margin-bottom: 24px;
+  }
+  h1{
+    font-size: 1.7rem;
+    letter-spacing: 0.01em;
+    margin:0;
+    font-weight: 800;
+    color: var(--text);
+  }
+  h1 span{ color: var(--accent); }
+  .sub{ color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+  /* PODIUM / CLASSEMENT */
+  .podium{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .rank-card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(36,16,18,0.05);
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .rank-card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:4px;
+  }
+  .rank-card.pos-1::before{ background: var(--or); }
+  .rank-card.pos-2::before{ background: var(--argent); }
+  .rank-card.pos-3::before{ background: var(--bronze); }
+  .rank-card .medal{ font-size: 1.4rem; }
+  .rank-card .team-name{
+    font-weight: 700; font-size: 1.05rem; margin: 6px 0 2px;
+    word-break: break-word;
+  }
+  .rank-card .score{
+    font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .rank-card .score small{ font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+
+  /* ACTIVITIES TABLE */
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(36,16,18,0.04);
+  }
+  .card h2{
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+
+  .activity{
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel-2);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .activity:last-child{ margin-bottom:0; }
+  .activity-head{
+    display:flex; align-items:center; gap: 10px; margin-bottom: 12px;
+  }
+  .activity-head .num{
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 0.9rem;
+    min-width: 22px;
+  }
+  .activity-head input.act-name{
+    flex:1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--line);
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 4px 2px;
+  }
+  .activity-head input.act-name:focus{
+    outline: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .picks{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .pick-team{
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px;
+    background: var(--panel);
+  }
+  .pick-team .pt-name{
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+  .pt-options{
+    display:flex; gap:6px;
+  }
+  .pt-options button{
+    flex:1;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 4px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .pt-options button:hover{ border-color: var(--accent); }
+  .pt-options button.active[data-pts="10"]{ background: var(--or); color:#241a00; border-color: var(--or);}
+  .pt-options button.active[data-pts="6"]{ background: var(--argent); color:#12151a; border-color: var(--argent);}
+  .pt-options button.active[data-pts="4"]{ background: var(--bronze); color:#241305; border-color: var(--bronze);}
+
+  .activity-status{
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .activity-status.warn{ color: #b98900; }
+  .activity-status.ok{ color: #1f8a4c; }
+
+  /* TEAM NAME EDITOR */
+  .team-editor{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .team-editor input{
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 9px 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .team-editor input:focus{ outline:none; border-color: var(--accent); }
+
+  .reset-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .reset-btn:hover{ border-color: var(--accent-2); color: var(--accent-2); }
+
+  @media (max-width: 640px){
+    .podium{ grid-template-columns: 1fr; }
+    .picks{ grid-template-columns: 1fr; }
+    .team-editor{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Olympiade <span>ROC Séniors 2026</span></h1>
+      <div class="sub">3 équipes · 6 activités · 10 / 6 / 4 points</div>
+    </div>
+    <button class="reset-btn" id="resetBtn">↺ Réinitialiser tout</button>
+  </header>
+
+  <div class="podium" id="podium"></div>
+
+  <div class="card">
+    <h2>Noms des équipes</h2>
+    <div class="team-editor" id="teamEditor"></div>
+  </div>
+
+  <div class="card">
+    <h2>Activités</h2>
+    <div id="activities"></div>
+  </div>
+
+</div>
+
+<script>
+  const NB_EQUIPES = 3;
+  const NB_ACTIVITES = 6;
+  const POINTS = [10, 6, 4];
+
+  // état en mémoire
+  let teams = Array.from({length: NB_EQUIPES}, (_, i) => `Équipe ${i + 1}`);
+  let activities = Array.from({length: NB_ACTIVITES}, (_, i) => `Activité ${i + 1}`);
+  // picks[activityIndex][teamIndex] = points attribués (10, 6, 4) ou null
+  let picks = Array.from({length: NB_ACTIVITES}, () => Array(NB_EQUIPES).fill(null));
+
+  const teamEditorEl = document.getElementById('teamEditor');
+  const activitiesEl = document.getElementById('activities');
+  const podiumEl = document.getElementById('podium');
+  const resetBtn = document.getElementById('resetBtn');
+
+  function computeTotals(){
+    const totals = Array(NB_EQUIPES).fill(0);
+    picks.forEach(row => {
+      row.forEach((pts, tIdx) => {
+        if(pts) totals[tIdx] += pts;
+      });
+    });
+    return totals;
+  }
+
+  function renderTeamEditor(){
+    teamEditorEl.innerHTML = '';
+    teams.forEach((name, idx) => {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = name;
+      input.placeholder = `Équipe ${idx + 1}`;
+      input.addEventListener('input', (e) => {
+        teams[idx] = e.target.value || `Équipe ${idx + 1}`;
+        renderActivities();
+        renderPodium();
+      });
+      teamEditorEl.appendChild(input);
+    });
+  }
+
+  function renderActivities(){
+    activitiesEl.innerHTML = '';
+    activities.forEach((actName, aIdx) => {
+      const activityDiv = document.createElement('div');
+      activityDiv.className = 'activity';
+
+      const head = document.createElement('div');
+      head.className = 'activity-head';
+      const num = document.createElement('div');
+      num.className = 'num';
+      num.textContent = `#${aIdx + 1}`;
+      const nameInput = document.createElement('input');
+      nameInput.className = 'act-name';
+      nameInput.type = 'text';
+      nameInput.value = actName;
+      nameInput.placeholder = `Activité ${aIdx + 1}`;
+      nameInput.addEventListener('input', (e) => {
+        activities[aIdx] = e.target.value || `Activité ${aIdx + 1}`;
+      });
+      head.appendChild(num);
+      head.appendChild(nameInput);
+      activityDiv.appendChild(head);
+
+      const picksDiv = document.createElement('div');
+      picksDiv.className = 'picks';
+
+      teams.forEach((teamName, tIdx) => {
+        const teamBlock = document.createElement('div');
+        teamBlock.className = 'pick-team';
+
+        const label = document.createElement('div');
+        label.className = 'pt-name';
+        label.textContent = teamName;
+        teamBlock.appendChild(label);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'pt-options';
+
+        POINTS.forEach(pt => {
+          const btn = document.createElement('button');
+          btn.textContent = pt;
+          btn.dataset.pts = pt;
+          if(picks[aIdx][tIdx] === pt) btn.classList.add('active');
+          btn.addEventListener('click', () => {
+            // si déjà sélectionné, on désélectionne
+            if(picks[aIdx][tIdx] === pt){
+              picks[aIdx][tIdx] = null;
+            } else {
+              // retirer ce nombre de points des autres équipes sur cette activité
+              picks[aIdx] = picks[aIdx].map(v => v === pt ? null : v);
+              picks[aIdx][tIdx] = pt;
+            }
+            renderActivities();
+            renderPodium();
+          });
+          optionsDiv.appendChild(btn);
+        });
+
+        teamBlock.appendChild(optionsDiv);
+        picksDiv.appendChild(teamBlock);
+      });
+
+      activityDiv.appendChild(picksDiv);
+
+      // statut
+      const status = document.createElement('div');
+      const filled = picks[aIdx].filter(v => v !== null).length;
+      if(filled === 0){
+        status.className = 'activity-status';
+        status.textContent = 'En attente de résultat';
+      } else if(filled < NB_EQUIPES){
+        status.className = 'activity-status warn';
+        status.textContent = `Incomplet (${filled}/${NB_EQUIPES} équipes classées)`;
+      } else {
+        status.className = 'activity-status ok';
+        status.textContent = 'Activité complète ✓';
+      }
+      activityDiv.appendChild(status);
+
+      activitiesEl.appendChild(activityDiv);
+    });
+  }
+
+  function renderPodium(){
+    const totals = computeTotals();
+    const ranking = teams
+      .map((name, idx) => ({ name, total: totals[idx], idx }))
+      .sort((a, b) => b.total - a.total);
+
+    const medals = ['🥇', '🥈', '🥉'];
+
+    podiumEl.innerHTML = '';
+    ranking.forEach((entry, rankIdx) => {
+      const card = document.createElement('div');
+      card.className = `rank-card pos-${rankIdx + 1}`;
+
+      const medal = document.createElement('div');
+      medal.className = 'medal';
+      medal.textContent = medals[rankIdx] || `#${rankIdx + 1}`;
+
+      const name = document.createElement('div');
+      name.className = 'team-name';
+      name.textContent = entry.name;
+
+      const score = document.createElement('div');
+      score.className = 'score';
+      score.innerHTML = `${entry.total} <small>pts</small>`;
+
+      card.appendChild(medal);
+      card.appendChild(name);
+      card.appendChild(score);
+      podiumEl.appendChild(card);
+    });
+  }
+
+  resetBtn.addEventListener('click', () => {
+    if(!confirm('Réinitialiser tous les scores et noms ?')) return;
+    teams = Array.from({length: NB_EQUIPES}, (_, i) => `Équipe ${i + 1}`);
+    activities = Array.from({length: NB_ACTIVITES}, (_, i) => `Activité ${i + 1}`);
+    picks = Array.from({length: NB_ACTIVITES}, () => Array(NB_EQUIPES).fill(null));
+    renderTeamEditor();
+    renderActivities();
+    renderPodium();
+  });
+
+  // init
+  renderTeamEditor();
+  renderActivities();
+  renderPodium();
+</script>
+</body>
+</html>
