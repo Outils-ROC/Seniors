@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Planning Entraînements - Septembre 2026</title>
+<title>Outils du Club</title>
 <style>
   :root {
     --club-white: #FFFFFF;
@@ -11,9 +11,6 @@
   }
   * {
     box-sizing: border-box;
-  }
-  html, body {
-    height: 100%;
   }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -27,189 +24,79 @@
   }
   .page {
     width: 100%;
-    max-width: 1400px;
+    max-width: 900px;
     margin: 0 auto;
     padding: clamp(16px, 3vw, 40px);
     flex: 1;
-    display: flex;
-    flex-direction: column;
   }
   .header {
     background: var(--club-red);
     color: var(--club-white);
-    padding: clamp(16px, 2.5vw, 28px) clamp(16px, 3vw, 34px);
+    padding: clamp(20px, 3vw, 32px);
     border-radius: 10px;
     text-align: center;
-    margin-bottom: clamp(16px, 2.5vw, 26px);
+    margin-bottom: clamp(20px, 3vw, 32px);
   }
   .header h1 {
     margin: 0;
-    font-size: clamp(20px, 3vw, 30px);
+    font-size: clamp(22px, 3vw, 30px);
     letter-spacing: 0.5px;
   }
   .header p {
-    margin: 6px 0 0;
+    margin: 8px 0 0;
     font-size: clamp(13px, 1.4vw, 15px);
     opacity: 0.9;
   }
-
-  /* ----- Vue tableau (tablette / desktop / plein écran) ----- */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--club-white);
-  }
-  th {
-    background: var(--club-red);
-    color: var(--club-white);
-    padding: clamp(10px, 1.4vw, 16px) 10px;
-    font-size: clamp(13px, 1.1vw, 15px);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  td {
-    padding: clamp(8px, 1.2vw, 14px) 10px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    font-size: clamp(14px, 1.1vw, 16px);
-  }
-  tr:nth-child(even) {
-    background: #fdf1f2;
-  }
-  tr:hover {
-    background: #fbe3e5;
-  }
-
-  /* ----- Vue cartes (mobile) ----- */
-  .cards {
-    display: none;
+  .tools {
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
-  .card {
-    background: var(--club-white);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    border-left: 5px solid var(--club-red);
-    padding: 14px 16px;
-  }
-  .card-date {
-    font-weight: 700;
-    font-size: 16px;
-    color: #222;
-  }
-  .card-jour {
-    font-size: 13px;
-    color: var(--club-red);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-  }
-  .card-row {
+  .tool-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: 8px;
+    gap: 16px;
+    background: var(--club-white);
+    border: 2px solid var(--club-red);
+    border-radius: 10px;
+    padding: 18px 22px;
+    text-decoration: none;
+    color: #222;
+    transition: background 0.15s ease, transform 0.1s ease;
   }
-  .card-row label {
+  .tool-card:hover {
+    background: #fdf1f2;
+    transform: translateY(-1px);
+  }
+  .tool-card .icon {
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .tool-card .content {
+    flex: 1;
+  }
+  .tool-card .name {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--club-red);
+  }
+  .tool-card .desc {
     font-size: 13px;
     color: #666;
-    font-weight: 600;
+    margin-top: 2px;
+  }
+  .tool-card .arrow {
+    font-size: 20px;
+    color: var(--club-red);
     flex-shrink: 0;
-    min-width: 60px;
   }
-
-  select {
-    width: 100%;
-    max-width: 160px;
-    padding: 10px 8px;
-    border-radius: 8px;
-    border: 2px solid var(--club-red);
-    background: var(--club-white);
-    color: #222;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  .cards select {
-    max-width: none;
-    min-height: 46px;
-  }
-  select:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(219,30,51,0.3);
-  }
-  select.conflict {
-    border-color: #ff8c00;
-    background: #fff4e5;
-  }
-  .summary {
-    margin-top: clamp(16px, 3vw, 30px);
-    background: #fdf1f2;
-    border: 2px solid var(--club-red);
-    border-radius: 8px;
-    padding: clamp(14px, 2vw, 22px) clamp(16px, 2.5vw, 28px);
-  }
-  .summary h2 {
-    color: var(--club-red);
-    font-size: clamp(15px, 1.6vw, 19px);
-    margin-top: 0;
-  }
-  .summary ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .summary li {
-    background: var(--club-white);
-    border: 1px solid var(--club-red);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: clamp(13px, 1.2vw, 15px);
-    flex: 1 1 160px;
-    text-align: center;
-  }
-  .summary li b {
-    color: var(--club-red);
-    display: block;
-    font-size: clamp(15px, 1.4vw, 17px);
-  }
-  .note {
-    margin-top: 14px;
-    font-size: 12px;
-    color: #777;
+  .empty-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #999;
     font-style: italic;
-    line-height: 1.4;
-  }
-
-  /* Tablette : cartes en grille 2 colonnes */
-  @media (max-width: 900px) and (min-width: 641px) {
-    .cards {
-      display: none;
-    }
-  }
-
-  /* Sous 640px : cartes au lieu du tableau */
-  @media (max-width: 640px) {
-    .page { padding: 12px; }
-    table { display: none; }
-    .cards { display: flex; }
-    .summary li { flex: 1 1 calc(50% - 10px); }
-  }
-
-  /* Grand écran (plein écran type OneDrive / moniteur) : on aère davantage */
-  @media (min-width: 1400px) {
-    .page { max-width: 1600px; }
+    text-align: center;
   }
 </style>
 </head>
@@ -217,179 +104,42 @@
 
 <div class="page">
 
-<div class="header">
-  <h1>🏉 Planning des Entraînements</h1>
-  <p>Septembre 2026 — Mercredis &amp; Vendredis soir</p>
+  <div class="header">
+    <h1>🏉 Outils du Club</h1>
+    <p>Espace regroupant les outils pratiques pour l'équipe</p>
+  </div>
+
+  <div class="tools">
+
+    <a class="tool-card" href="planning.html">
+      <div class="icon">📅</div>
+      <div class="content">
+        <div class="name">Planning des entraînements</div>
+        <div class="desc">Répartition des coachs — Septembre 2026</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <!--
+      Pour ajouter un nouvel outil :
+      1. Uploade son fichier .html dans le repository (ex: convocations.html)
+      2. Copie-colle un bloc <a class="tool-card">...</a> ci-dessus
+      3. Change href, icon, name et desc pour ton nouvel outil
+
+      Exemple :
+      <a class="tool-card" href="convocations.html">
+        <div class="icon">✉️</div>
+        <div class="content">
+          <div class="name">Convocations</div>
+          <div class="desc">Générateur de convocations match</div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+    -->
+
+  </div>
+
 </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Jour</th>
-      <th>Coach 1</th>
-      <th>Coach 2</th>
-    </tr>
-  </thead>
-  <tbody id="planning-body">
-    <!-- rempli par JS -->
-  </tbody>
-</table>
-
-<div class="cards" id="planning-cards">
-  <!-- rempli par JS -->
-</div>
-
-<div class="summary">
-  <h2>Répartition en temps réel</h2>
-  <ul id="summary-list"></ul>
-</div>
-
-<p class="note">Choisissez les coachs dans les listes déroulantes. Le décompte se met à jour automatiquement. Un contour orange signale deux fois le même coach sur une même séance.</p>
-
-</div>
-
-<script>
-const coaches = ["", "Edouard", "Augustin", "Baptiste", "Guillaume"];
-
-const sessions = [
-  { date: "02/09/2026", jour: "Mercredi", c1: "Edouard", c2: "Augustin" },
-  { date: "04/09/2026", jour: "Vendredi", c1: "Baptiste", c2: "Guillaume" },
-  { date: "09/09/2026", jour: "Mercredi", c1: "Edouard", c2: "Baptiste" },
-  { date: "11/09/2026", jour: "Vendredi", c1: "Augustin", c2: "Guillaume" },
-  { date: "16/09/2026", jour: "Mercredi", c1: "Edouard", c2: "Guillaume" },
-  { date: "18/09/2026", jour: "Vendredi", c1: "Augustin", c2: "Baptiste" },
-  { date: "23/09/2026", jour: "Mercredi", c1: "Edouard", c2: "Augustin" },
-  { date: "25/09/2026", jour: "Vendredi", c1: "Baptiste", c2: "Guillaume" },
-  { date: "30/09/2026", jour: "Mercredi", c1: "Edouard", c2: "Baptiste" }
-];
-
-const tbody = document.getElementById("planning-body");
-const cardsContainer = document.getElementById("planning-cards");
-
-// Un select "change" doit répercuter sa valeur sur son jumeau (tableau <-> carte)
-function makeSelect(rowIndex, slot, selected) {
-  const sel = document.createElement("select");
-  sel.dataset.row = rowIndex;
-  sel.dataset.slot = slot;
-  coaches.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c === "" ? "— Choisir —" : c;
-    if (c === selected) opt.selected = true;
-    sel.appendChild(opt);
-  });
-  sel.addEventListener("change", () => {
-    syncTwins(sel);
-    updateSummary();
-    checkConflicts();
-  });
-  return sel;
-}
-
-// Synchronise la valeur entre la vue tableau et la vue cartes pour la même séance/slot
-function syncTwins(source) {
-  const row = source.dataset.row;
-  const slot = source.dataset.slot;
-  document.querySelectorAll(`select[data-row="${row}"][data-slot="${slot}"]`).forEach(sel => {
-    if (sel !== source) sel.value = source.value;
-  });
-}
-
-sessions.forEach((s, i) => {
-  // ----- Vue tableau -----
-  const tr = document.createElement("tr");
-
-  const tdDate = document.createElement("td");
-  tdDate.textContent = s.date;
-  tr.appendChild(tdDate);
-
-  const tdJour = document.createElement("td");
-  tdJour.textContent = s.jour;
-  tr.appendChild(tdJour);
-
-  const tdC1 = document.createElement("td");
-  tdC1.appendChild(makeSelect(i, 1, s.c1));
-  tr.appendChild(tdC1);
-
-  const tdC2 = document.createElement("td");
-  tdC2.appendChild(makeSelect(i, 2, s.c2));
-  tr.appendChild(tdC2);
-
-  tbody.appendChild(tr);
-
-  // ----- Vue cartes (mobile) -----
-  const card = document.createElement("div");
-  card.className = "card";
-  card.dataset.row = i;
-
-  const cardDate = document.createElement("div");
-  cardDate.className = "card-date";
-  cardDate.textContent = s.date;
-  card.appendChild(cardDate);
-
-  const cardJour = document.createElement("div");
-  cardJour.className = "card-jour";
-  cardJour.textContent = s.jour;
-  card.appendChild(cardJour);
-
-  const row1 = document.createElement("div");
-  row1.className = "card-row";
-  const label1 = document.createElement("label");
-  label1.textContent = "Coach 1";
-  row1.appendChild(label1);
-  row1.appendChild(makeSelect(i, 1, s.c1));
-  card.appendChild(row1);
-
-  const row2 = document.createElement("div");
-  row2.className = "card-row";
-  const label2 = document.createElement("label");
-  label2.textContent = "Coach 2";
-  row2.appendChild(label2);
-  row2.appendChild(makeSelect(i, 2, s.c2));
-  card.appendChild(row2);
-
-  cardsContainer.appendChild(card);
-});
-
-function updateSummary() {
-  const counts = { Edouard: 0, Augustin: 0, Baptiste: 0, Guillaume: 0 };
-  // On ne compte qu'une seule fois par séance (vue tableau), même si les deux
-  // vues (tableau + cartes) sont présentes et synchronisées dans le DOM
-  document.querySelectorAll("#planning-body select").forEach(sel => {
-    if (sel.value && counts.hasOwnProperty(sel.value)) {
-      counts[sel.value]++;
-    }
-  });
-  const list = document.getElementById("summary-list");
-  list.innerHTML = "";
-  Object.entries(counts).forEach(([name, count]) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<b>${name}</b> : ${count} séance${count > 1 ? "s" : ""}`;
-    list.appendChild(li);
-  });
-}
-
-function checkConflicts() {
-  // Applique le contour orange sur les deux vues (tableau et cartes)
-  document.querySelectorAll("tbody tr, .card").forEach(group => {
-    const selects = group.querySelectorAll("select");
-    const s1 = selects[0];
-    const s2 = selects[1];
-    if (!s1 || !s2) return;
-    if (s1.value && s2.value && s1.value === s2.value) {
-      s1.classList.add("conflict");
-      s2.classList.add("conflict");
-    } else {
-      s1.classList.remove("conflict");
-      s2.classList.remove("conflict");
-    }
-  });
-}
-
-updateSummary();
-checkConflicts();
-</script>
 
 </body>
 </html>
