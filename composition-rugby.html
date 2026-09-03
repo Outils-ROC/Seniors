@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Composition d'équipe</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --club-red:#DB1E33;
+    --club-white:#FFFFFF;
+    --pitch-dark:#1f6b3a;
+    --pitch-light:#237a41;
+    --line:rgba(255,255,255,0.55);
+    --badge:var(--club-red);
+    --badge-bench:#8a2530;
+    --ink:#20120f;
+    --paper:#f6f1f0;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding:18px 0 50px;
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:420px;
+    padding:0 14px;
+  }
+  .topbar{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .club-strip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--club-red);
+    color:var(--club-white);
+    border-radius:10px;
+    padding:10px 12px;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.02em;
+  }
+  .club-strip .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--club-white);
+    flex-shrink:0;
+  }
+  .meta{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .meta-field{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .meta-field label{
+    font-size:11px;
+    letter-spacing:.02em;
+    color:#7a6866;
+  }
+  .meta-field input{
+    border:none;
+    border-bottom:2px solid #e2d3d1;
+    background:transparent;
+    font-size:15px;
+    font-weight:600;
+    padding:5px 2px;
+    color:var(--ink);
+    outline:none;
+    font-family:inherit;
+    width:100%;
+  }
+  .meta-field input:focus{border-bottom-color:var(--club-red);}
+  .actions{
+    display:flex;
+    gap:8px;
+  }
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    padding:11px 10px;
+    font-size:13px;
+    font-weight:700;
+    flex:1;
+  }
+  .btn-secondary{
+    background:#efe4e3;
+    color:var(--ink);
+  }
+  .btn-secondary:hover{background:#e5d5d3;}
+  .btn-primary{
+    background:var(--club-red);
+    color:#fff;
+  }
+  .btn-primary:hover{background:#b81729;}
+  .btn-primary:disabled{opacity:.6; cursor:default;}
+
+  .pitch-wrap{
+    background:var(--card);
+    border-radius:16px;
+    padding:10px;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);
+    border:2px solid var(--club-red);
+  }
+
+  .pitch{
+    position:relative;
+    background-color:var(--pitch-dark);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='56'><rect width='56' height='56' fill='%231f6b3a'/><rect x='28' width='28' height='56' fill='%23237a41'/></svg>");
+    background-repeat:repeat;
+    border-radius:10px;
+    padding:18px 3% 0;
+    overflow:hidden;
+  }
+  .pitch::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:0;
+    height:20px;
+    border-bottom:2px dashed var(--line);
+  }
+  .pitch-lines{
+    position:absolute;
+    inset:20px 0 0 0;
+    border-top:2px solid var(--line);
+    pointer-events:none;
+  }
+  .halfway{
+    position:absolute;
+    left:0; right:0; top:50%;
+    border-top:2px dashed var(--line);
+    pointer-events:none;
+  }
+  .row{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    padding:0 1%;
+    margin-bottom:20px;
+  }
+  .row.centered{
+    justify-content:center;
+    gap:10%;
+  }
+  .row.wide4{
+    justify-content:space-between;
+  }
+  .row.single{
+    justify-content:center;
+  }
+
+  .slot{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    width:23%;
+    min-width:0;
+  }
+  .row.centered .slot{ width:34%; }
+  .row.single .slot{ width:40%; }
+
+  .num{
+    width:22px;
+    height:22px;
+    border-radius:5px;
+    background:var(--badge);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:11px;
+    box-shadow:0 1px 2px rgba(0,0,0,.25);
+    flex-shrink:0;
+  }
+  .slot.bench .num{background:var(--badge-bench);}
+  .slot input{
+    width:100%;
+    text-align:center;
+    border:none;
+    border-radius:5px;
+    background:rgba(255,255,255,0.92);
+    padding:5px 2px;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+    font-family:inherit;
+  }
+  .slot input::placeholder{color:#8a958c; font-weight:500;}
+  .slot input:focus{
+    background:#fff;
+    box-shadow:0 0 0 2px var(--club-red);
+  }
+  /* Utilisé uniquement pendant la génération de l'image PNG, à la place des <input>
+     car html2canvas rend mal le texte des champs de formulaire. */
+  .slot .value-text{
+    width:100%;
+    box-sizing:border-box;
+    text-align:center;
+    border-radius:5px;
+    background:rgba(255,255,255,0.92);
+    padding:6px 3px;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--ink);
+    font-family:inherit;
+    line-height:1.3;
+    white-space:normal;
+    word-break:break-word;
+  }
+  .slot .value-text.is-placeholder{ color:#8a958c; font-weight:500; }
+  .bench-grid .slot .value-text{ background:#fff; text-align:left; padding:6px 8px; font-size:12px; }
+
+  .posts{
+    display:flex;
+    justify-content:center;
+    margin-top:-4px;
+    padding-bottom:12px;
+  }
+  .posts svg{ display:block; }
+
+  .bench-section{
+    margin-top:18px;
+  }
+  .bench-title{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.02em;
+    color:#7a6866;
+    margin-bottom:8px;
+  }
+  .bench-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:8px;
+  }
+  .bench-grid .slot{
+    width:auto;
+    flex-direction:row;
+    background:#f3e9e8;
+    border-radius:8px;
+    padding:6px;
+  }
+  .bench-grid .slot .num{width:22px;height:22px;font-size:11px;border-radius:5px;}
+  .bench-grid .slot input{background:#fff; text-align:left; padding:6px 8px; font-size:12px;}
+
+  .footer-note{
+    text-align:center;
+    font-size:11px;
+    color:#9a8a88;
+    margin-top:14px;
+  }
+
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink);
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:50;
+    max-width:90vw;
+    text-align:center;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="club-strip"><span class="dot"></span><span id="clubLabel">Composition d'équipe</span></div>
+    <div class="meta">
+      <div class="meta-field">
+        <label>Équipe</label>
+        <input id="teamName" type="text" placeholder="Nom de l'équipe" />
+      </div>
+      <div class="meta-field">
+        <label>Adversaire</label>
+        <input id="opponent" type="text" placeholder="Adversaire" />
+      </div>
+      <div class="meta-field">
+        <label>Date / Compétition</label>
+        <input id="matchInfo" type="text" placeholder="ex. 14 sept. — Championnat" />
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="resetBtn">Réinitialiser</button>
+      <button class="btn-primary" id="copyBtn">Copier en image PNG</button>
+    </div>
+  </div>
+
+  <div id="captureArea">
+    <div class="pitch-wrap">
+      <div class="pitch" id="pitch">
+        <div class="pitch-lines"></div>
+        <div class="halfway"></div>
+
+        <!-- Front row 1-2-3 -->
+        <div class="row wide4">
+          <div class="slot" data-pos="1"><div class="num">1</div><input type="text" placeholder="Pilier g."></div>
+          <div class="slot" data-pos="2"><div class="num">2</div><input type="text" placeholder="Talonneur"></div>
+          <div class="slot" data-pos="3"><div class="num">3</div><input type="text" placeholder="Pilier d."></div>
+        </div>
+
+        <!-- Locks 4-5 -->
+        <div class="row centered">
+          <div class="slot" data-pos="4"><div class="num">4</div><input type="text" placeholder="2e ligne"></div>
+          <div class="slot" data-pos="5"><div class="num">5</div><input type="text" placeholder="2e ligne"></div>
+        </div>
+
+        <!-- Back row 6-8-7 -->
+        <div class="row wide4">
+          <div class="slot" data-pos="6"><div class="num">6</div><input type="text" placeholder="3e ligne"></div>
+          <div class="slot" data-pos="8"><div class="num">8</div><input type="text" placeholder="3e ligne"></div>
+          <div class="slot" data-pos="7"><div class="num">7</div><input type="text" placeholder="3e ligne"></div>
+        </div>
+
+        <!-- Half backs 9-10 -->
+        <div class="row centered">
+          <div class="slot" data-pos="9"><div class="num">9</div><input type="text" placeholder="Mêlée"></div>
+          <div class="slot" data-pos="10"><div class="num">10</div><input type="text" placeholder="Ouverture"></div>
+        </div>
+
+        <!-- Three-quarters 11-12-13-14 -->
+        <div class="row wide4">
+          <div class="slot" data-pos="11"><div class="num">11</div><input type="text" placeholder="Ailier"></div>
+          <div class="slot" data-pos="12"><div class="num">12</div><input type="text" placeholder="Centre"></div>
+          <div class="slot" data-pos="13"><div class="num">13</div><input type="text" placeholder="Centre"></div>
+          <div class="slot" data-pos="14"><div class="num">14</div><input type="text" placeholder="Ailier"></div>
+        </div>
+
+        <!-- Fullback 15 -->
+        <div class="row single">
+          <div class="slot" data-pos="15"><div class="num">15</div><input type="text" placeholder="Arrière"></div>
+        </div>
+
+        <div class="posts">
+          <svg width="70" height="36" viewBox="0 0 90 46">
+            <polyline points="8,0 8,30 82,30 82,0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+            <line x1="45" y1="30" x2="45" y2="46" stroke="#ffffff" stroke-width="4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bench-section">
+      <div class="bench-title">Remplaçants</div>
+      <div class="bench-grid" id="bench">
+        <div class="slot bench" data-pos="16"><div class="num">16</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="17"><div class="num">17</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="18"><div class="num">18</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="19"><div class="num">19</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="20"><div class="num">20</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="21"><div class="num">21</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="22"><div class="num">22</div><input type="text" placeholder="Remplaçant"></div>
+        <div class="slot bench" data-pos="23"><div class="num">23</div><input type="text" placeholder="Remplaçant"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">Les compositions sont enregistrées automatiquement sur cet appareil.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'rugby-lineup-v1';
+  const allInputs = () => Array.from(document.querySelectorAll('input[type="text"]'));
+  const metaIds = ['teamName','opponent','matchInfo'];
+
+  function collectState(){
+    const state = { meta:{}, positions:{} };
+    metaIds.forEach(id => state.meta[id] = document.getElementById(id).value);
+    document.querySelectorAll('.slot').forEach(slot => {
+      const pos = slot.getAttribute('data-pos');
+      const input = slot.querySelector('input');
+      state.positions[pos] = input.value;
+    });
+    return state;
+  }
+
+  async function save(){
+    try{
+      const state = collectState();
+      await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+    }catch(e){
+      console.error('Erreur de sauvegarde', e);
+    }
+  }
+
+  function applyState(state){
+    if(!state) return;
+    if(state.meta){
+      metaIds.forEach(id => {
+        if(state.meta[id] !== undefined) document.getElementById(id).value = state.meta[id];
+      });
+    }
+    if(state.positions){
+      document.querySelectorAll('.slot').forEach(slot => {
+        const pos = slot.getAttribute('data-pos');
+        const input = slot.querySelector('input');
+        if(state.positions[pos] !== undefined) input.value = state.positions[pos];
+      });
+    }
+    updateClubLabel();
+  }
+
+  async function load(){
+    try{
+      const result = await window.storage.get(STORAGE_KEY, false);
+      if(result && result.value){
+        applyState(JSON.parse(result.value));
+      }
+    }catch(e){
+      // pas de donnees existantes, on ignore
+    }
+  }
+
+  let saveTimer = null;
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 400);
+  }
+
+  function updateClubLabel(){
+    const team = document.getElementById('teamName').value.trim();
+    const opp = document.getElementById('opponent').value.trim();
+    const label = document.getElementById('clubLabel');
+    if(team && opp) label.textContent = team + ' vs ' + opp;
+    else if(team) label.textContent = team;
+    else label.textContent = "Composition d'équipe";
+  }
+
+  function attachListeners(){
+    allInputs().forEach(el => el.addEventListener('input', () => { scheduleSave(); updateClubLabel(); }));
+  }
+
+  const resetBtn = document.getElementById('resetBtn');
+  let resetArmed = false;
+  let resetArmTimer = null;
+  resetBtn.addEventListener('click', () => {
+    if(!resetArmed){
+      resetArmed = true;
+      resetBtn.textContent = 'Confirmer ?';
+      resetArmTimer = setTimeout(() => {
+        resetArmed = false;
+        resetBtn.textContent = 'Réinitialiser';
+      }, 3000);
+      return;
+    }
+    clearTimeout(resetArmTimer);
+    resetArmed = false;
+    resetBtn.textContent = 'Réinitialiser';
+    allInputs().forEach(el => el.value = '');
+    updateClubLabel();
+    save();
+  });
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function buildCaptureClone(target){
+    // html2canvas ne rend pas correctement le texte des <input> (coupé, mal aligné).
+    // On construit donc un clone hors-écran où chaque <input> est remplacé par un
+    // simple bloc de texte affichant sa valeur (ou son placeholder), avant capture.
+    const originalInputs = Array.from(target.querySelectorAll('input[type="text"]'));
+    const clone = target.cloneNode(true);
+    const clonedInputs = Array.from(clone.querySelectorAll('input[type="text"]'));
+
+    clonedInputs.forEach((clonedInput, i) => {
+      const original = originalInputs[i];
+      const value = original.value.trim();
+      const div = document.createElement('div');
+      div.className = 'value-text' + (value ? '' : ' is-placeholder');
+      div.textContent = value || original.placeholder;
+      clonedInput.replaceWith(div);
+    });
+
+    const rect = target.getBoundingClientRect();
+    clone.style.position = 'fixed';
+    clone.style.top = '0';
+    clone.style.left = '-10000px';
+    clone.style.width = rect.width + 'px';
+    clone.style.margin = '0';
+    document.body.appendChild(clone);
+    return clone;
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('copyBtn');
+    const target = document.getElementById('captureArea');
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = 'Génération...';
+    let clone = null;
+    try{
+      clone = buildCaptureClone(target);
+      const canvas = await html2canvas(clone, { backgroundColor: '#f6f1f0', scale: 2 });
+      document.body.removeChild(clone);
+      clone = null;
+      canvas.toBlob(async (blob) => {
+        if(!blob){ throw new Error('blob failed'); }
+        let copied = false;
+        if(navigator.clipboard && window.ClipboardItem){
+          try{
+            await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+            copied = true;
+          }catch(err){
+            copied = false;
+          }
+        }
+        if(copied){
+          showToast('Image copiée dans le presse-papiers');
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'composition-equipe.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Copie indisponible ici — image téléchargée');
+        }
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }, 'image/png');
+    }catch(e){
+      console.error(e);
+      if(clone && clone.parentNode) document.body.removeChild(clone);
+      showToast("Erreur lors de la génération de l'image");
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+
+  load().then(attachListeners);
+  attachListeners();
+  updateClubLabel();
+})();
+</script>
+</body>
+</html>
