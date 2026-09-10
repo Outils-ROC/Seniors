@@ -23,8 +23,16 @@
     text-align: center;
     margin-bottom: 24px;
   }
-  .header h1 { margin: 0; font-size: 26px; letter-spacing: 1px; }
-  .header p { margin: 6px 0 0; font-size: 14px; opacity: 0.9; }
+  .header h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+  .header p {
+    margin: 6px 0 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
   table {
     width: 100%;
     border-collapse: collapse;
@@ -40,24 +48,28 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-size: 15px; }
-  tr:nth-child(even) { background: #fdf1f2; }
-  tr:hover { background: #fbe3e5; }
-  select {
-    width: 100%;
-    max-width: 160px;
-    padding: 7px 8px;
-    border-radius: 6px;
-    border: 2px solid var(--club-red);
-    background: var(--club-white);
-    color: #222;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+  td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
   }
-  select:focus { outline: none; box-shadow: 0 0 0 2px rgba(219,30,51,0.3); }
-  select.conflict { border-color: #ff8c00; background: #fff4e5; }
-  select:disabled { opacity: 0.5; cursor: wait; }
+  tr:nth-child(even) {
+    background: #fdf1f2;
+  }
+  tr:hover {
+    background: #fbe3e5;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--club-red);
+    color: var(--club-white);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    margin: 2px;
+  }
   .summary {
     margin-top: 30px;
     background: #fdf1f2;
@@ -65,23 +77,34 @@
     border-radius: 8px;
     padding: 18px 24px;
   }
-  .summary h2 { color: var(--club-red); font-size: 18px; margin-top: 0; }
-  .summary ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 14px; }
-  .summary li { background: var(--club-white); border: 1px solid var(--club-red); border-radius: 6px; padding: 8px 14px; font-size: 14px; }
-  .summary li b { color: var(--club-red); }
-  .note { margin-top: 14px; font-size: 13px; color: #777; font-style: italic; }
-  .actions { margin-top: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-  button { border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
-  #save-btn { background: var(--club-red); color: var(--club-white); }
-  #save-btn:hover { background: #b81729; }
-  #save-btn:disabled { background: #ccc; cursor: not-allowed; }
-  #reset-btn { background: var(--club-white); color: var(--club-red); border: 2px solid var(--club-red); }
-  #reset-btn:hover { background: #fdf1f2; }
-  #save-status { font-size: 13px; font-weight: 600; }
-  .sync-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #888; margin-left: auto; }
-  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
-  .sync-dot.live { background: #2ecc71; }
-  .sync-dot.error { background: #ff8c00; }
+  .summary h2 {
+    color: var(--club-red);
+    font-size: 18px;
+    margin-top: 0;
+  }
+  .summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .summary li {
+    background: var(--club-white);
+    border: 1px solid var(--club-red);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .summary li b {
+    color: var(--club-red);
+  }
+  .summary p.detail {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #999;
+  }
 </style>
 </head>
 <body>
@@ -93,228 +116,36 @@
 
 <table>
   <thead>
-    <tr><th>Date</th><th>Jour</th><th>Coach 1</th><th>Coach 2</th></tr>
+    <tr>
+      <th>Date</th>
+      <th>Jour</th>
+      <th>Coach principal</th>
+      <th>Coach secondaire</th>
+    </tr>
   </thead>
-  <tbody id="planning-body"></tbody>
+  <tbody>
+    <tr><td>02/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Augustin</span></td></tr>
+    <tr><td>07/10/2026</td><td>Mercredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Baptiste</span></td></tr>
+    <tr><td>09/10/2026</td><td>Vendredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>14/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Edouard</span></td></tr>
+    <tr><td>16/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Baptiste</span></td></tr>
+    <tr><td>21/10/2026</td><td>Mercredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>23/10/2026</td><td>Vendredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Augustin</span></td></tr>
+    <tr><td>28/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Augustin</span></td></tr>
+    <tr><td>30/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Baptiste</span></td></tr>
+  </tbody>
 </table>
 
 <div class="summary">
-  <h2>Répartition en temps réel</h2>
-  <ul id="summary-list"></ul>
+  <h2>Répartition totale (9 séances × 2 coachs = 18 présences)</h2>
+  <ul>
+    <li><b>Augustin</b> : 5 séances <span style="color:#999">(2 principal / 3 secondaire)</span></li>
+    <li><b>Baptiste</b> : 5 séances <span style="color:#999">(2 principal / 3 secondaire)</span></li>
+    <li><b>Edouard</b> : 4 séances <span style="color:#999">(3 principal / 1 secondaire)</span></li>
+    <li><b>Guillaume</b> : 4 séances <span style="color:#999">(2 principal / 2 secondaire)</span></li>
+  </ul>
+  <p class="detail">Coach principal réparti au plus proche de l'équilibre possible : Edouard 3 fois, les trois autres 2 fois chacun (9 séances non divisibles exactement par 4).</p>
 </div>
-
-<p class="note">Choisissez les coachs, puis cliquez sur "Enregistrer" : ça pousse un commit sur GitHub, visible par tous. Un contour orange signale deux fois le même coach sur une même séance.</p>
-
-<div class="actions">
-  <button id="save-btn">💾 Enregistrer sur GitHub</button>
-  <button id="reset-btn">↺ Réinitialiser</button>
-  <span id="save-status"></span>
-  <span class="sync-indicator"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Chargement...</span></span>
-</div>
-
-<script>
-/* ============================================================
-   CONFIGURATION GITHUB — À REMPLIR AVEC VOS INFOS
-   ============================================================ */
-const GITHUB_OWNER  = "GuiHome49";   // ex: "clubrugby"
-const GITHUB_REPO   = "Seniors";                  // ex: "planning-coachs"
-const GITHUB_BRANCH = "main";                        // ou "master"
-// ⚠️ Jeton en dur : quiconque voit le code source de cette page peut le récupérer.
-// Utilisez un jeton "fine-grained" limité à CE SEUL repo, permission Contents: Read/write uniquement,
-// avec une date d'expiration, et gardez le repo privé si possible.
-const GITHUB_TOKEN  = "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";
-const DATA_PATH     = "data/planning-octobre-2026.json";
-/* ============================================================ */
-
-const API_BASE = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DATA_PATH}`;
-
-const coaches = ["", "Edouard", "Augustin", "Baptiste", "Guillaume"];
-
-const defaultSessions = [
-  { date: "02/10/2026", jour: "Vendredi", c1: "Augustin", c2: "Guillaume" },
-  { date: "07/10/2026", jour: "Mercredi", c1: "Edouard", c2: "Baptiste" },
-  { date: "09/10/2026", jour: "Vendredi", c1: "Augustin", c2: "Baptiste" },
-  { date: "14/10/2026", jour: "Mercredi", c1: "Edouard", c2: "Guillaume" },
-  { date: "16/10/2026", jour: "Vendredi", c1: "Augustin", c2: "Edouard" },
-  { date: "21/10/2026", jour: "Mercredi", c1: "Baptiste", c2: "Guillaume" },
-  { date: "23/10/2026", jour: "Vendredi", c1: "Augustin", c2: "Guillaume" },
-  { date: "28/10/2026", jour: "Mercredi", c1: "Edouard", c2: "Baptiste" },
-  { date: "30/10/2026", jour: "Vendredi", c1: "Augustin", c2: "Baptiste" }
-];
-
-let currentSha = null;
-const tbody = document.getElementById("planning-body");
-const saveStatus = document.getElementById("save-status");
-const syncDot = document.getElementById("sync-dot");
-const syncText = document.getElementById("sync-text");
-
-function makeSelect(rowIndex, slot, selected) {
-  const sel = document.createElement("select");
-  sel.dataset.row = rowIndex;
-  sel.dataset.slot = slot;
-  coaches.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c === "" ? "— Choisir —" : c;
-    if (c === selected) opt.selected = true;
-    sel.appendChild(opt);
-  });
-  sel.addEventListener("change", () => { updateSummary(); checkConflicts(); });
-  return sel;
-}
-
-function buildTable(sessions) {
-  tbody.innerHTML = "";
-  sessions.forEach((s, i) => {
-    const tr = document.createElement("tr");
-    const tdDate = document.createElement("td"); tdDate.textContent = s.date; tr.appendChild(tdDate);
-    const tdJour = document.createElement("td"); tdJour.textContent = s.jour; tr.appendChild(tdJour);
-    const tdC1 = document.createElement("td"); tdC1.appendChild(makeSelect(i, 1, s.c1)); tr.appendChild(tdC1);
-    const tdC2 = document.createElement("td"); tdC2.appendChild(makeSelect(i, 2, s.c2)); tr.appendChild(tdC2);
-    tbody.appendChild(tr);
-  });
-  updateSummary();
-  checkConflicts();
-}
-
-function updateSummary() {
-  const counts = { Edouard: 0, Augustin: 0, Baptiste: 0, Guillaume: 0 };
-  document.querySelectorAll("select").forEach(sel => {
-    if (sel.value && counts.hasOwnProperty(sel.value)) counts[sel.value]++;
-  });
-  const list = document.getElementById("summary-list");
-  list.innerHTML = "";
-  Object.entries(counts).forEach(([name, count]) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<b>${name}</b> : ${count} séance${count > 1 ? "s" : ""}`;
-    list.appendChild(li);
-  });
-}
-
-function checkConflicts() {
-  document.querySelectorAll("#planning-body tr").forEach(tr => {
-    const selects = tr.querySelectorAll("select");
-    const s1 = selects[0], s2 = selects[1];
-    if (s1.value && s2.value && s1.value === s2.value) {
-      s1.classList.add("conflict"); s2.classList.add("conflict");
-    } else {
-      s1.classList.remove("conflict"); s2.classList.remove("conflict");
-    }
-  });
-}
-
-function getCurrentSelections() {
-  const rows = document.querySelectorAll("#planning-body tr");
-  return Array.from(rows).map((tr, i) => {
-    const selects = tr.querySelectorAll("select");
-    return { date: defaultSessions[i].date, jour: defaultSessions[i].jour, c1: selects[0].value, c2: selects[1].value };
-  });
-}
-
-function b64EncodeUnicode(str) {
-  return btoa(unescape(encodeURIComponent(str)));
-}
-function b64DecodeUnicode(str) {
-  return decodeURIComponent(escape(atob(str)));
-}
-
-function getToken() {
-  return GITHUB_TOKEN;
-}
-
-async function loadData(showSpinner) {
-  try {
-    const res = await fetch(`${API_BASE}?ref=${GITHUB_BRANCH}&_=${Date.now()}`, {
-      headers: { Accept: "application/vnd.github+json" }
-    });
-    if (res.status === 404) {
-      currentSha = null;
-      buildTable(defaultSessions);
-      syncDot.classList.remove("error"); syncDot.classList.add("live");
-      syncText.textContent = "Aucune donnée enregistrée pour l'instant";
-      return;
-    }
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const json = await res.json();
-    currentSha = json.sha;
-    const decoded = b64DecodeUnicode(json.content.replace(/\n/g, ""));
-    const data = JSON.parse(decoded);
-    buildTable(Array.isArray(data.sessions) ? data.sessions : defaultSessions);
-    syncDot.classList.remove("error"); syncDot.classList.add("live");
-    syncText.textContent = "Synchronisé avec GitHub";
-  } catch (e) {
-    console.error(e);
-    syncDot.classList.remove("live"); syncDot.classList.add("error");
-    syncText.textContent = "Hors ligne / repo non configuré";
-    if (tbody.children.length === 0) buildTable(defaultSessions);
-  }
-}
-
-async function saveChanges() {
-  const token = getToken();
-  if (!token) return;
-  const btn = document.getElementById("save-btn");
-  btn.disabled = true;
-  saveStatus.textContent = "Enregistrement...";
-  saveStatus.style.color = "#888";
-  try {
-    const payload = { sessions: getCurrentSelections() };
-    const body = {
-      message: `Mise à jour du planning (${new Date().toLocaleString("fr-FR")})`,
-      content: b64EncodeUnicode(JSON.stringify(payload, null, 2)),
-      branch: GITHUB_BRANCH
-    };
-    if (currentSha) body.sha = currentSha;
-
-    const res = await fetch(API_BASE, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-
-    if (res.status === 401) {
-      saveStatus.textContent = "⚠️ Jeton invalide ou expiré — vérifiez GITHUB_TOKEN dans le code";
-      saveStatus.style.color = "#ff8c00";
-    } else if (res.status === 409) {
-      saveStatus.textContent = "⚠️ Quelqu'un a modifié entretemps — rechargez la page";
-      saveStatus.style.color = "#ff8c00";
-    } else if (!res.ok) {
-      const errText = await res.text();
-      console.error(errText);
-      saveStatus.textContent = `⚠️ Erreur GitHub (${res.status})`;
-      saveStatus.style.color = "#ff8c00";
-    } else {
-      const json = await res.json();
-      currentSha = json.content.sha;
-      saveStatus.textContent = "Enregistré et poussé sur GitHub ✓";
-      saveStatus.style.color = "var(--club-red)";
-    }
-  } catch (e) {
-    console.error(e);
-    saveStatus.textContent = "⚠️ Échec réseau";
-    saveStatus.style.color = "#ff8c00";
-  } finally {
-    btn.disabled = false;
-    setTimeout(() => { saveStatus.textContent = ""; }, 5000);
-  }
-}
-
-document.getElementById("save-btn").addEventListener("click", saveChanges);
-
-document.getElementById("reset-btn").addEventListener("click", () => {
-  if (!confirm("Réinitialiser la répartition pour TOUT LE MONDE ? Cela écrase les modifications enregistrées.")) return;
-  buildTable(defaultSessions);
-  saveChanges();
-});
-
-// Chargement initial + actualisation périodique pour voir les modifs des autres
-loadData();
-setInterval(loadData, 20000);
-</script>
 
 </body>
 </html>
