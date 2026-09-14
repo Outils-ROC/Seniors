@@ -101,9 +101,18 @@
     color: var(--club-red);
   }
   .summary p.detail {
-    margin: 4px 0 0;
+    margin: 6px 0 0;
     font-size: 12px;
     color: #999;
+  }
+  .absences {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #b81729;
+    background: #fff4e5;
+    border-left: 4px solid var(--club-red);
+    padding: 10px 14px;
+    border-radius: 4px;
   }
 </style>
 </head>
@@ -114,7 +123,11 @@
   <p>Octobre 2026 — Mercredis &amp; Vendredis soir</p>
 </div>
 
-<table>
+<div class="absences">
+  ⚠️ <b>Edouard</b> absent tout le mois d'octobre &nbsp;|&nbsp; <b>Baptiste</b> absent les 02/10, 07/10, 28/10 et 30/10
+</div>
+
+<table style="margin-top:16px;">
   <thead>
     <tr>
       <th>Date</th>
@@ -124,27 +137,27 @@
     </tr>
   </thead>
   <tbody>
-    <tr><td>02/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Augustin</span></td></tr>
-    <tr><td>07/10/2026</td><td>Mercredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Baptiste</span></td></tr>
-    <tr><td>09/10/2026</td><td>Vendredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Guillaume</span></td></tr>
-    <tr><td>14/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Edouard</span></td></tr>
-    <tr><td>16/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Baptiste</span></td></tr>
-    <tr><td>21/10/2026</td><td>Mercredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>02/10/2026</td><td>Vendredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>07/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Augustin</span></td></tr>
+    <tr><td>09/10/2026</td><td>Vendredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Augustin</span></td></tr>
+    <tr><td>14/10/2026</td><td>Mercredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>16/10/2026</td><td>Vendredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Baptiste</span></td></tr>
+    <tr><td>21/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Baptiste</span></td></tr>
     <tr><td>23/10/2026</td><td>Vendredi</td><td><span class="badge">Baptiste</span></td><td><span class="badge">Augustin</span></td></tr>
-    <tr><td>28/10/2026</td><td>Mercredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Augustin</span></td></tr>
-    <tr><td>30/10/2026</td><td>Vendredi</td><td><span class="badge">Edouard</span></td><td><span class="badge">Baptiste</span></td></tr>
+    <tr><td>28/10/2026</td><td>Mercredi</td><td><span class="badge">Augustin</span></td><td><span class="badge">Guillaume</span></td></tr>
+    <tr><td>30/10/2026</td><td>Vendredi</td><td><span class="badge">Guillaume</span></td><td><span class="badge">Augustin</span></td></tr>
   </tbody>
 </table>
 
 <div class="summary">
   <h2>Répartition totale (9 séances × 2 coachs = 18 présences)</h2>
   <ul>
-    <li><b>Augustin</b> : 5 séances <span style="color:#999">(2 principal / 3 secondaire)</span></li>
-    <li><b>Baptiste</b> : 5 séances <span style="color:#999">(2 principal / 3 secondaire)</span></li>
-    <li><b>Edouard</b> : 4 séances <span style="color:#999">(3 principal / 1 secondaire)</span></li>
-    <li><b>Guillaume</b> : 4 séances <span style="color:#999">(2 principal / 2 secondaire)</span></li>
+    <li><b>Augustin</b> : 7 séances <span style="color:#999">(3 principal / 4 secondaire)</span></li>
+    <li><b>Guillaume</b> : 6 séances <span style="color:#999">(2 principal / 4 secondaire)</span></li>
+    <li><b>Baptiste</b> : 5 séances <span style="color:#999">(3 principal / 2 secondaire)</span></li>
+    <li><b>Edouard</b> : 0 séance <span style="color:#999">(absent)</span></li>
   </ul>
-  <p class="detail">Coach principal réparti au plus proche de l'équilibre possible : Edouard 3 fois, les trois autres 2 fois chacun (9 séances non divisibles exactement par 4).</p>
+  <p class="detail">Edouard étant absent tout le mois, sa charge est reportée sur Augustin, Baptiste et Guillaume. Baptiste étant indisponible sur 4 dates, Augustin et Guillaume couvrent seuls ces séances (02/10, 07/10, 28/10, 30/10), ce qui explique leur charge un peu plus élevée.</p>
 </div>
 
 </body>
